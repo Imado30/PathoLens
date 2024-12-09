@@ -20,6 +20,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from .api_views import GetImageAPIView
+from .api_views import SaveConfidenceAPIView
 from .views import testRenderImageView
 
 
@@ -27,7 +28,7 @@ urlpatterns = [
     
     path('', include('accounts.urls')),
     path('diagnosis/<int:diagID>/', views.diagnosisView, name='patholensDiagnosisWithID'),
-    path('confidence/<int:diagID>/', views.saveConfidence, name='saveConfidence'),
+     path('api/saveConfidence/<int:diagID>/', SaveConfidenceAPIView.as_view(), name='saveConfidence'),
 
     path('api/getImage/<str:imageID>/', GetImageAPIView.as_view(), name='getImage'),
     path('other/<str:imageID>/', testRenderImageView, name='otherView')

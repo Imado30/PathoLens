@@ -5,6 +5,8 @@ from rest_framework import status
 from django.conf import settings
 from .models import diagnosis
 import os
+from django.shortcuts import get_object_or_404
+
 
 
 class GetImageAPIView(APIView):
@@ -55,4 +57,24 @@ class GetImageAPIView(APIView):
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
 
+class SaveConfidenceAPIView(APIView):
+    def post(self, request, diagID):
+        try:
+            
+            data = request.data
+            confidence = data.get('confidence')
 
+            
+            if confidence is None or not (0 <= int(confidence) <= 100):
+                return Response({'error': 'Invalid confidence value. It must be between 0 and 100.'}, status=status.HTTP_400_BAD_REQUEST)
+
+           
+            diag = get_object_or_404(diagnosis, diagID=diagID)
+
+            # Confidence speichern
+            diag.confidence = int(confidence)
+            diag.save()
+
+            return Response({'message': 'Confidence value saved successfully via API!'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': f'An unexpected error occurred: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
