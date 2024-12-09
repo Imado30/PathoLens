@@ -64,14 +64,14 @@ class SaveConfidenceAPIView(APIView):
             data = request.data
             confidence = data.get('confidence')
 
-            
+            # check if it is a valid value 
             if confidence is None or not (0 <= int(confidence) <= 100):
                 return Response({'error': 'Invalid confidence value. It must be between 0 and 100.'}, status=status.HTTP_400_BAD_REQUEST)
 
            
             diag = get_object_or_404(Diagnosis, diagID=diagID)
 
-            # Confidence speichern
+            # store confidence value 
             diag.confidence = int(confidence)
             diag.save()
 

@@ -10,6 +10,7 @@ class Diagnosis(models.Model):
     # PROTECT: if the referenced user is deleted, the diagnosis won't be deleted
     userID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.PROTECT)
     confidence = models.PositiveSmallIntegerField(null = True, blank = True)
+    editedDiagConfidence = models.PositiveSmallIntegerField(null = True, blank = True)
     subID = models.PositiveIntegerField(null = True, blank = True)
 
     def __str__(self):
