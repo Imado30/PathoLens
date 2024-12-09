@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework import status
 from django.conf import settings
-from .models import diagnosis
+from .models import Diagnosis
 import os
 from django.shortcuts import get_object_or_404
 
@@ -69,7 +69,7 @@ class SaveConfidenceAPIView(APIView):
                 return Response({'error': 'Invalid confidence value. It must be between 0 and 100.'}, status=status.HTTP_400_BAD_REQUEST)
 
            
-            diag = get_object_or_404(diagnosis, diagID=diagID)
+            diag = get_object_or_404(Diagnosis, diagID=diagID)
 
             # Confidence speichern
             diag.confidence = int(confidence)
