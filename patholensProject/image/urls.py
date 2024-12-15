@@ -19,8 +19,8 @@ from django.urls import path, include
 from . import views
 from django.conf import settings
 from django.conf.urls.static import static
-from .api_views import GetImageAPIView
-from .api_views import SaveConfidenceAPIView
+from .apiViews import GetImageAPIView
+from .apiViews import SaveConfidenceAPIView
 from .views import testRenderImageView
 
 

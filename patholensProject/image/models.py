@@ -1,17 +1,17 @@
 from django.db import models
 from accounts.models import Doctors
-from django.conf import settings
+
 
 
 
 # diagnosis class for linkage between the different db entries that "participate" in a certain diagnosis
 class Diagnosis(models.Model):
-    diagID = models.AutoField(primary_key = True)
+    diagID =models.CharField(primary_key=True, max_length=100)
     # PROTECT: if the referenced user is deleted, the diagnosis won't be deleted
-    userID = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.PROTECT)
+    doctor =  models.ForeignKey(Doctors, on_delete=models.CASCADE)
     confidence = models.PositiveSmallIntegerField(null = True, blank = True)
     editedDiagConfidence = models.PositiveSmallIntegerField(null = True, blank = True)
-    subID = models.PositiveIntegerField(null = True, blank = True)
+    imageUrl = models.CharField(null=False, max_length=20, default="Unknown")
 
     def __str__(self):
         return str(self.diagID)

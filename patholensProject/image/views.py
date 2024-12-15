@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -27,3 +28,7 @@ def diagnosisView(request, diagID):
 def newDiagnosis(request, diagnosisID):
 
     return render(request, "image/diagnosisPage.html", {"diagnosisID": diagnosisID})
+
+
+def testRenderImageView(request, imageID):
+    return render(request, 'image/diagnosisPage.html', {'imageID': imageID})

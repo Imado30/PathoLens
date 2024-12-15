@@ -4,6 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from .models import Diagnosis
 from django.contrib.auth.models import User
+from accounts.models import Doctors
 
 class SaveConfidenceAPITest(TestCase):
 
@@ -20,11 +21,12 @@ class SaveConfidenceAPITest(TestCase):
         
         self.user = User.objects.create(username="testuser")
 
+        self.doctor = Doctors.objects.create(doctorID=self.user)
         
         self.diag = Diagnosis.objects.create(
             diagID=1,
             confidence=0,
-            userID=self.user  
+            doctor=self.doctor  
         )
 
     def testValidConfidence(self):
