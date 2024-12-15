@@ -1,5 +1,7 @@
 from django.db import models
 from accounts.models import Doctors
+from django.conf import settings
+
 
 
 # diagnosis class for linkage between the different db entries that "participate" in a certain diagnosis
