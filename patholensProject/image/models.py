@@ -1,7 +1,5 @@
 from django.db import models
-from django.conf import settings
-
-# Create your models here.
+from accounts.models import Doctors
 
 
 # diagnosis class for linkage between the different db entries that "participate" in a certain diagnosis
@@ -15,6 +13,7 @@ class Diagnosis(models.Model):
 
     def __str__(self):
         return str(self.diagID)
+
 
 # useTime class for storing the timestamps of executed actions during diagnosis
 class UseTime(models.Model):
