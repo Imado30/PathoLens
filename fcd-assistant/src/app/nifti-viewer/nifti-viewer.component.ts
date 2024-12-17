@@ -1,45 +1,77 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { ImageLoaderService } from '../services/ImageLoader/image-loader.service';
+import { Component, OnInit } from '@angular/core';
 import { Niivue } from '@niivue/niivue';
 
 @Component({
   selector: 'app-nifti-viewer',
-  imports: [],
   templateUrl: './nifti-viewer.component.html',
-  styleUrl: './nifti-viewer.component.scss'
+  styleUrls: ['./nifti-viewer.component.scss']
 })
 export class NiftiViewerComponent implements OnInit {
 
-  imageLoaderService: ImageLoaderService;
+  constructor() {}
 
-  constructor(imageLoaderService: ImageLoaderService) {
-    // Inject our service to load an MRI image from the backend
-    this.imageLoaderService = imageLoaderService; // for now it's not used, as we load a local file from /assets
-  }
+  niivue = new Niivue({ show3Dcrosshair: true });
 
   ngOnInit(): void {
-    /*
-    TODO: Create proper input logic on which patient data is supposed to be selected
-    and use the imageLoaderService to fetch the data from the backend
-    */ 
+    const url = './assets/sub-00078_space-orig_FLAIR.nii.gz';
 
-    // render the Niivue window on screen and feed it a test file
-    const url = './assets/sub-00107_space-orig_FLAIR.nii.gz';
     const volumeList = [
       {
         url,
-        schema: "nifti",
-        volume: { hdr: null, img: null},
+        schema: 'nifti',
+        volume: { hdr: null, img: null },
         colorMap: 'gray',
         opacity: 1,
         visible: true
       }
     ];
+
+
+    this.niivue.attachTo('gl');
+
+    this.niivue.loadVolumes(volumeList)
+      .then(() => {
+      })
+      .catch(err => {
+        console.error("Error loading volumes:", err);
+      });
+  }
+
+ 
+  public drawBorderRectangle(): void {
+    if (!this.niivue.volumes || this.niivue.volumes.length === 0 || !this.niivue.volumes[0].dimsRAS) {
+      console.error("Error: Volume data not loaded properly.");
+      return;
+    }
+
+    this.niivue.setDrawingEnabled(true)
+
+    const dims = this.niivue.volumes[0].dimsRAS; 
+    if (!dims) {
+      console.error("Error: Volume dimensions not available.");
+      return;
+    }
+
+    console.log("Volume Dimensions (X, Y, Z):", dims);
     
-    const niivue = new Niivue({show3Dcrosshair: true});
-    
-    // attach to the canvas in the .html file of this component
-    niivue.attachTo('gl');
-    niivue.loadVolumes(volumeList);
+    const maxX = dims[0] - 1; 
+    const maxY = dims[1] - 1; 
+    const fixedZ = 0;     
+
+    const penColor = 4; 
+
+    const topLeft = [0, 0, fixedZ];
+    const topRight = [maxX, 0, fixedZ];
+    const bottomLeft = [0, maxY, fixedZ];
+    const bottomRight = [maxX, maxY, fixedZ];
+
+    this.niivue.setPenValue(penColor);
+
+    this.niivue.drawPenLine(topLeft, topRight, penColor);       // Top edge
+    this.niivue.drawPenLine(topRight, bottomRight, penColor);   // Right edge
+    this.niivue.drawPenLine(bottomRight, bottomLeft, penColor); // Bottom edge
+    this.niivue.drawPenLine(bottomLeft, topLeft, penColor);     // Left edge
+
+    this.niivue.refreshDrawing(true);
   }
 }

@@ -2,6 +2,11 @@
   <div class="viewer-title">
     <p>Nifti Viewer</p>
   </div>
+  <div class="button-bar">
+    <button><i class="fa-solid fa-arrow-pointer"></i></button>
+    <button (click)="onDrawBorderClicked()"><i class="fa-regular fa-square"></i></button>
+    <button><i class="fa-solid fa-eraser"></i></button>
+  </div>
   <div class="viewer-canvas">
     <app-nifti-viewer></app-nifti-viewer>
   </div>

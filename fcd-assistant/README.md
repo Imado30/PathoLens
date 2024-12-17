@@ -1,25 +1,3 @@
-# README #
-
-Please stick to a [git flow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow) workflow.
-
-## fcd-assistant ##
-
-The frontend for the AI interactions subsystem using Angular v19.
-The aim will be to integrate this subsystem into the patholens project later on.
-
-### How do I get set up? ###
-
-Install [Node.js](https://nodejs.org/en) v22.12.0 (LTS version).
-
-If you are using a UNIX system, using [nvm](https://github.com/nvm-sh/nvm) is highly recommended to install nodejs, to avoid permission problems.
-
-Install [Angular](https://angular.dev/installation) on your system via `npm install -g @angular/cli`.
-
-Once nodejs and Angular is installed, move into the root folder of the Angular project (`fcd-assistant/`) in the terminal and run `npm install` to install all needed dependencies.
-
-Finally you can start the frontend server with `ng serve`.
-
-
 # FcdAssistant
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.2.
