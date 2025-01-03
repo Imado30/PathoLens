@@ -1,42 +1,55 @@
 @import url('https://fonts.googleapis.com/css?family=Cabin');
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    align-items: center;
-    flex: 1.65;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: flex-start;
     background-color: #00242F;
-    height: calc(100% - 40px);
-    margin: 20px;
+    height: 100%;
+    margin: 0;
     padding: 20px;
-    position: relative;
     overflow: hidden;
 }
 
-
 h1 {
     text-align: center;
-    font-size: 65px;
-    margin-top: 50px;
+    font-size: 4vw;  /* Flexible Schriftgröße */
+    margin: 20px 0;
     color: #ffffff;
     font-family: 'Cabin', sans-serif;
-    margin-bottom: 5px;     
 }
 
 h3 {
-    margin-top: 10px;
     text-align: center;
-    font-size: 40px;
+    font-size: 2.5vw;
     color: #ffffff;
     font-family: 'Cabin', sans-serif;
+    margin-bottom: 20px;
 }
-
 
 .welcomeImage {
     width: 100%;
     max-width: 550px; 
-    margin: -20px;  
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 6vw;
+    }
+    h3 {
+        font-size: 4vw;
+    }
+    .welcomeImage {
+        max-width: 400px;
+    }
 }
 
 
