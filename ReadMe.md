@@ -56,9 +56,9 @@ A full-stack web application that supports medical diagnoses through AI-powered 
 
 We would like to express our heartfelt gratitude to the following individuals for their invaluable support and guidance throughout the development of this project:  
 
-- **Professor XY**: For offering the project group and providing us with the opportunity to explore this innovative topic.  
+- **Professor Stephan Jonas**: For offering the project group and providing us with the opportunity to explore this innovative topic.  
 - **Taylor**: A developer of the `niivue` library, for his technical JavaScript support and prompt assistance.  
-- **Lenart**: For being an incredible resource, always available to help with technical challenges and domain-related questions.  
+- **Lennart**: For being an incredible resource, always available to help with technical challenges and domain-related questions.  
 - **Amelia**: Our dedicated manager, whose background in psychology provided us with invaluable insights on improving the user-friendliness of our platform. Her thoughtful suggestions and feedback greatly helped us in the design- and structering process.  
 
 Your contributions and encouragement have been instrumental in making this project a success. Thank you!  
