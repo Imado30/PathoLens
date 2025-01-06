@@ -474,10 +474,23 @@ document.addEventListener('DOMContentLoaded', function() {
     async function handleLogout() {
         await saveEditedImage();
         // Perform logout operation here
-        console.log("User logged out successfully!");
+        console.log("Saved Diagnosis status and user logged out successfully!");
     }
     
 
     // save image if logged out
     document.getElementById("logoutButton").addEventListener("click", handleLogout);
+
+
+    //save image if home Button is clicked 
+    async function handleHome(event) {
+        event.preventDefault(); // Prevent the default action
+        await saveEditedImage();
+        window.location.href = "/startingPage"; // Navigate to the home page
+        console.log("Navigated to home successfully!");
+    }
+
+    document.getElementById("homeIcon").addEventListener("click", handleHome);
+
+
 });
