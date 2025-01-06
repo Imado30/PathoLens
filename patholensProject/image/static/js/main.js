@@ -492,5 +492,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById("homeIcon").addEventListener("click", handleHome);
 
+    async function handleNameIcon(event) {
+        event.preventDefault(); // Prevent the default action
+        await saveEditedImage();
+        
+        window.location.href = "/startingPage"; // Navigate to the home page
+        console.log("Navigated to home successfully!");
+    }
+    document.querySelector(".NameIcon a").addEventListener("click", handleNameIcon);
 
 });
