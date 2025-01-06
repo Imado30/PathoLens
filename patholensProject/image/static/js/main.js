@@ -470,7 +470,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return cookieValue;
     }
-     
+    
+    async function handleLogout() {
+        await saveEditedImage();
+        // Perform logout operation here
+        console.log("User logged out successfully!");
+    }
+    
+
     // save image if logged out
-    document.getElementById("logoutButton").addEventListener("click", saveEditedImage);
+    document.getElementById("logoutButton").addEventListener("click", handleLogout);
 });
