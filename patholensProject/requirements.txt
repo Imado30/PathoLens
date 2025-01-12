@@ -2,3 +2,4 @@ Django == 5.1.3
 djangorestframework
 drf-spectacular 
 numpy
+rest_framework_simplejwt
