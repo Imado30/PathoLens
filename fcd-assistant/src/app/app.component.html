@@ -3,11 +3,11 @@
     <p>Nifti Viewer</p>
   </div>
   <div class="button-bar">
-    <button><i class="fa-solid fa-arrow-pointer"></i></button>
-    <button (click)="onDrawBorderClicked()"><i class="fa-regular fa-square"></i></button>
+    <button (click)="onViewingClicked()" ><i class="fa-solid fa-arrow-pointer"></i></button>
+    <button (click)="onDrawingClicked()"><i class="fa-regular fa-square"></i></button>
     <button><i class="fa-solid fa-eraser"></i></button>
   </div>
   <div class="viewer-canvas">
-    <app-nifti-viewer></app-nifti-viewer>
+    <app-nifti-viewer #glCanvas></app-nifti-viewer>
   </div>
 </div>

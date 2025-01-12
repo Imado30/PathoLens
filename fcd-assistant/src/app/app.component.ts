@@ -15,7 +15,12 @@ export class AppComponent implements AfterViewInit {
   @ViewChild(NiftiViewerComponent) niftiViewerComponent!: NiftiViewerComponent; // Reference to the child component
 
   ngAfterViewInit(): void {
+    const canvas = this.niftiViewerComponent.canvasRef.nativeElement; // Access canvas in the child component
     this.resizeCanvas(); 
+      // Attach mouse event listeners
+    canvas.addEventListener('mousedown', (event) => this.niftiViewerComponent.startDrag(event));
+    canvas.addEventListener('mousemove', (event) => this.niftiViewerComponent.onDrag(event));
+    canvas.addEventListener('mouseup', (event) => this.niftiViewerComponent.endDrag(event));
   }
 
   @HostListener('window:resize', ['$event'])
@@ -23,8 +28,12 @@ export class AppComponent implements AfterViewInit {
     this.resizeCanvas();
   }
 
-  onDrawBorderClicked() {
-    this.niftiViewerComponent.drawBorderRectangle();
+  onDrawingClicked() {
+    this.niftiViewerComponent.enableDrawing();
+  }
+
+  onViewingClicked(){
+    this.niftiViewerComponent.disableDrawing();
   }
 
   private resizeCanvas(): void {

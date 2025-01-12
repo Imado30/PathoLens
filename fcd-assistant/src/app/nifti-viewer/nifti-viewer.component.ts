@@ -1,77 +1,218 @@
-import { Component, OnInit } from '@angular/core';
-import { Niivue } from '@niivue/niivue';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Niivue, DRAG_MODE } from '@niivue/niivue';
 
 @Component({
   selector: 'app-nifti-viewer',
   templateUrl: './nifti-viewer.component.html',
-  styleUrls: ['./nifti-viewer.component.scss']
+  styleUrls: ['./nifti-viewer.component.scss'],
 })
-export class NiftiViewerComponent implements OnInit {
+export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  constructor() {}
 
-  niivue = new Niivue({ show3Dcrosshair: true });
+  @ViewChild('glCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;  // Reference to canvas element
+  niivue: Niivue;
+  voxStart: number[] = [0, 0, 0];  // To store starting voxel coordinates
+  voxEnd: number[] = [0, 0, 0];    // To store ending voxel coordinates
+  isDrawing: boolean = false;       // To track if drawing is in progress
+
+  constructor() {
+    this.niivue = new Niivue({
+      show3Dcrosshair: true,
+      dragMode: DRAG_MODE.callbackOnly
+    });
+  }
 
   ngOnInit(): void {
-    const url = './assets/sub-00078_space-orig_FLAIR.nii.gz';
+    this.loadDefaultVolume();
+  }
 
-    const volumeList = [
+  ngAfterViewInit(): void {
+    // Access the canvas from the ViewChild
+    const canvas = this.canvasRef.nativeElement;
+    
+    // Attach Niivue to the canvas element
+    this.niivue.attachToCanvas(canvas);
+    this.loadDefaultVolume();
+
+    // Attach mouse events for drawing
+    canvas.addEventListener('mousedown', (event) => this.startDrag(event));
+    canvas.addEventListener('mousemove', (event) => this.onDrag(event));
+    canvas.addEventListener('mouseup', (event) => this.endDrag(event));
+  }
+
+  ngOnDestroy(): void {
+    const canvas = this.canvasRef.nativeElement;
+    canvas.removeEventListener('mousedown', (event) => this.startDrag(event));
+    canvas.removeEventListener('mousemove', (event) => this.onDrag(event));
+    canvas.removeEventListener('mouseup', (event) => this.endDrag(event));
+  }
+
+  private loadDefaultVolume() {
+    const url = './assets/sub-00078_space-orig_FLAIR.nii.gz';
+    const volumes = [
       {
         url,
         schema: 'nifti',
         volume: { hdr: null, img: null },
         colorMap: 'gray',
         opacity: 1,
-        visible: true
-      }
+        visible: true,
+      },
     ];
 
-
     this.niivue.attachTo('gl');
-
-    this.niivue.loadVolumes(volumeList)
-      .then(() => {
-      })
+    this.niivue.loadVolumes(volumes)
+      .then(() => {})
       .catch(err => {
         console.error("Error loading volumes:", err);
       });
   }
 
- 
-  public drawBorderRectangle(): void {
-    if (!this.niivue.volumes || this.niivue.volumes.length === 0 || !this.niivue.volumes[0].dimsRAS) {
-      console.error("Error: Volume data not loaded properly.");
+  public enableDrawing(): void {
+    if (!this.niivue || !this.niivue.volumes || this.niivue.volumes.length === 0) {
+      console.error('Error: Volume data not loaded properly.');
       return;
     }
 
-    this.niivue.setDrawingEnabled(true)
+    this.niivue.setDrawingEnabled(true);
+    console.log('Drawing mode enabled.');
+  }
 
-    const dims = this.niivue.volumes[0].dimsRAS; 
-    if (!dims) {
-      console.error("Error: Volume dimensions not available.");
-      return;
+  public disableDrawing(): void {
+    if (this.niivue) {
+      this.niivue.setDrawingEnabled(false);
+      console.log('Drawing mode disabled.');
     }
+  }
 
-    console.log("Volume Dimensions (X, Y, Z):", dims);
+  private onRectangleDraw(data: any): void {
+    this.drawRectangleNiivue(this.niivue, data);
+  }
+
+  private drawRectangleNiivue(nv: Niivue, data: any): void {
     
-    const maxX = dims[0] - 1; 
-    const maxY = dims[1] - 1; 
-    const fixedZ = 0;     
+    nv.setDrawingEnabled(true);
+    const colourValue = 3;
+    nv.setPenValue(colourValue);
 
-    const penColor = 4; 
+    const { voxStart, voxEnd, axCorSag } = data;
+    let topLeft: number[] = [0, 0, 0], topRight: number[] = [0, 0, 0], bottomLeft: number[] = [0, 0, 0], bottomRight: number[] = [0, 0, 0];
+    let topLeftO: number[] = [0, 0, 0], topRightO: number[] = [0, 0, 0], bottomLeftO: number[] = [0, 0, 0], bottomRightO: number[] = [0, 0, 0];
 
-    const topLeft = [0, 0, fixedZ];
-    const topRight = [maxX, 0, fixedZ];
-    const bottomLeft = [0, maxY, fixedZ];
-    const bottomRight = [maxX, maxY, fixedZ];
+    switch (axCorSag) {
+      case 0: { // Coronal
+        const minX = Math.min(voxStart[0], voxEnd[0]);
+        const maxX = Math.max(voxStart[0], voxEnd[0]);
+        const minY = Math.min(voxStart[1], voxEnd[1]);
+        const maxY = Math.max(voxStart[1], voxEnd[1]);
+        const fixedZ = voxStart[2];
+        topLeft = [minX, minY, fixedZ];
+        topRight = [maxX, minY, fixedZ];
+        bottomLeft = [minX, maxY, fixedZ];
+        bottomRight = [maxX, maxY, fixedZ];
 
-    this.niivue.setPenValue(penColor);
+        topLeftO = [minX - 1, minY - 1, fixedZ];
+        topRightO = [maxX + 1, minY - 1, fixedZ];
+        bottomLeftO = [minX - 1, maxY + 1, fixedZ];
+        bottomRightO = [maxX + 1, maxY + 1, fixedZ];
+        break;
+      }
+      case 1: { // Sagittal
+        const minX = Math.min(voxStart[0], voxEnd[0]);
+        const maxX = Math.max(voxStart[0], voxEnd[0]);
+        const minZ = Math.min(voxStart[2], voxEnd[2]);
+        const maxZ = Math.max(voxStart[2], voxEnd[2]);
+        const fixedY = voxStart[1];
+        topLeft = [minX, fixedY, minZ];
+        topRight = [maxX, fixedY, minZ];
+        bottomLeft = [minX, fixedY, maxZ];
+        bottomRight = [maxX, fixedY, maxZ];
 
-    this.niivue.drawPenLine(topLeft, topRight, penColor);       // Top edge
-    this.niivue.drawPenLine(topRight, bottomRight, penColor);   // Right edge
-    this.niivue.drawPenLine(bottomRight, bottomLeft, penColor); // Bottom edge
-    this.niivue.drawPenLine(bottomLeft, topLeft, penColor);     // Left edge
+        topLeftO = [minX - 1, fixedY, minZ - 1];
+        topRightO = [maxX + 1, fixedY, minZ - 1];
+        bottomLeftO = [minX - 1, fixedY, maxZ + 1];
+        bottomRightO = [maxX + 1, fixedY, maxZ + 1];
+        break;
+      }
+      case 2: { // Axial
+        const minY = Math.min(voxStart[1], voxEnd[1]);
+        const maxY = Math.max(voxStart[1], voxEnd[1]);
+        const minZ = Math.min(voxStart[2], voxEnd[2]);
+        const maxZ = Math.max(voxStart[2], voxEnd[2]);
+        const fixedX = voxStart[0];
+        topLeft = [fixedX, minY, minZ];
+        topRight = [fixedX, maxY, minZ];
+        bottomLeft = [fixedX, minY, maxZ];
+        bottomRight = [fixedX, maxY, maxZ];
 
-    this.niivue.refreshDrawing(true);
+        topLeftO = [fixedX, minY - 1, minZ - 1];
+        topRightO = [fixedX, maxY + 1, minZ - 1];
+        bottomLeftO = [fixedX, minY - 1, maxZ + 1];
+        bottomRightO = [fixedX, maxY + 1, maxZ + 1];
+        break;
+      }
+      default: {
+        console.error('Invalid axCorSag value.');
+        return;
+      }
+    }
+
+    nv.drawPenLine(topLeft, topRight, colourValue);
+    nv.drawPenLine(topRight, bottomRight, colourValue);
+    nv.drawPenLine(bottomRight, bottomLeft, colourValue);
+    nv.drawPenLine(bottomLeft, topLeft, colourValue);
+
+    nv.drawPenLine(topLeftO, topRightO, colourValue);
+    nv.drawPenLine(topRightO, bottomRightO, colourValue);
+    nv.drawPenLine(bottomRightO, bottomLeftO, colourValue);
+    nv.drawPenLine(bottomLeftO, topLeftO, colourValue);
+
+    nv.refreshDrawing(true);
+    nv.setDrawingEnabled(false);
+    console.log("Drawn?")
+  }
+
+  public startDrag(event: MouseEvent): void {
+    if (!this.niivue || !this.niivue.volumes || this.niivue.volumes.length === 0) {
+      console.error('Error: Volume data not loaded properly.');
+      return;
+    }
+
+    const mousePos = this.getMousePosition(event);
+    this.voxStart = mousePos;
+    this.isDrawing = true;
+  }
+
+  public onDrag(event: MouseEvent): void {
+    if (!this.isDrawing) return;
+
+    const mousePos = this.getMousePosition(event);
+    this.voxEnd = mousePos;
+  }
+
+  public endDrag(event: MouseEvent): void {
+    if (!this.isDrawing) return;
+
+    this.isDrawing = false;
+    const mousePos = this.getMousePosition(event);
+    this.voxEnd = mousePos;
+
+    console.log(this.voxStart);
+    console.log(this.voxEnd);
+
+    this.onRectangleDraw({
+      voxStart: this.voxStart,
+      voxEnd: this.voxEnd,
+      axCorSag: 0
+    });
+  }
+
+  private getMousePosition(event: MouseEvent): number[] {
+    const canvas = event.target as HTMLCanvasElement;
+    const rect = canvas.getBoundingClientRect();
+    const x = (event.clientX - rect.left) * canvas.width / rect.width;
+    const y = (event.clientY - rect.top) * canvas.height / rect.height;
+    const z = 0;
+    return [x, y, z];
   }
 }
