@@ -17,10 +17,6 @@ export class AppComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     const canvas = this.niftiViewerComponent.canvasRef.nativeElement; // Access canvas in the child component
     this.resizeCanvas(); 
-      // Attach mouse event listeners
-    canvas.addEventListener('mousedown', (event) => this.niftiViewerComponent.startDrag(event));
-    canvas.addEventListener('mousemove', (event) => this.niftiViewerComponent.onDrag(event));
-    canvas.addEventListener('mouseup', (event) => this.niftiViewerComponent.endDrag(event));
   }
 
   @HostListener('window:resize', ['$event'])

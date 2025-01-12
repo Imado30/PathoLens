@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { Niivue, DRAG_MODE } from '@niivue/niivue';
+import { Niivue, DRAG_MODE, DragReleaseParams} from '@niivue/niivue';
 
 @Component({
   selector: 'app-nifti-viewer',
@@ -14,12 +14,20 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   voxStart: number[] = [0, 0, 0];  // To store starting voxel coordinates
   voxEnd: number[] = [0, 0, 0];    // To store ending voxel coordinates
   isDrawing: boolean = false;       // To track if drawing is in progress
+  DrawingEnabled: boolean = false;
 
   constructor() {
+    const onDragRelease = (data: DragReleaseParams) : void => {
+      this.drawRectangleNiivue(this.niivue, data);
+    };
+  
     this.niivue = new Niivue({
       show3Dcrosshair: true,
-      dragMode: DRAG_MODE.callbackOnly
+      dragMode: DRAG_MODE.callbackOnly,
     });
+  
+    this.niivue.onDragRelease = onDragRelease;
+    this.niivue.drawOpacity = 1.0;
   }
 
   ngOnInit(): void {
@@ -33,18 +41,10 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     // Attach Niivue to the canvas element
     this.niivue.attachToCanvas(canvas);
     this.loadDefaultVolume();
-
-    // Attach mouse events for drawing
-    canvas.addEventListener('mousedown', (event) => this.startDrag(event));
-    canvas.addEventListener('mousemove', (event) => this.onDrag(event));
-    canvas.addEventListener('mouseup', (event) => this.endDrag(event));
   }
 
   ngOnDestroy(): void {
     const canvas = this.canvasRef.nativeElement;
-    canvas.removeEventListener('mousedown', (event) => this.startDrag(event));
-    canvas.removeEventListener('mousemove', (event) => this.onDrag(event));
-    canvas.removeEventListener('mouseup', (event) => this.endDrag(event));
   }
 
   private loadDefaultVolume() {
@@ -55,7 +55,7 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
         schema: 'nifti',
         volume: { hdr: null, img: null },
         colorMap: 'gray',
-        opacity: 1,
+        opacity: 0.5,
         visible: true,
       },
     ];
@@ -69,20 +69,13 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public enableDrawing(): void {
-    if (!this.niivue || !this.niivue.volumes || this.niivue.volumes.length === 0) {
-      console.error('Error: Volume data not loaded properly.');
-      return;
-    }
-
-    this.niivue.setDrawingEnabled(true);
+    this.DrawingEnabled = true;
     console.log('Drawing mode enabled.');
   }
 
   public disableDrawing(): void {
-    if (this.niivue) {
-      this.niivue.setDrawingEnabled(false);
-      console.log('Drawing mode disabled.');
-    }
+    this.DrawingEnabled = false;
+    console.log('Drawing mode disabled.');
   }
 
   private onRectangleDraw(data: any): void {
@@ -90,9 +83,9 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private drawRectangleNiivue(nv: Niivue, data: any): void {
-    
+    if(this.DrawingEnabled){
     nv.setDrawingEnabled(true);
-    const colourValue = 3;
+    const colourValue = 5;
     nv.setPenValue(colourValue);
 
     const { voxStart, voxEnd, axCorSag } = data;
@@ -157,6 +150,7 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
 
+
     nv.drawPenLine(topLeft, topRight, colourValue);
     nv.drawPenLine(topRight, bottomRight, colourValue);
     nv.drawPenLine(bottomRight, bottomLeft, colourValue);
@@ -169,50 +163,8 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
     nv.refreshDrawing(true);
     nv.setDrawingEnabled(false);
-    console.log("Drawn?")
+    console.log("Drawn?")}
   }
 
-  public startDrag(event: MouseEvent): void {
-    if (!this.niivue || !this.niivue.volumes || this.niivue.volumes.length === 0) {
-      console.error('Error: Volume data not loaded properly.');
-      return;
-    }
 
-    const mousePos = this.getMousePosition(event);
-    this.voxStart = mousePos;
-    this.isDrawing = true;
-  }
-
-  public onDrag(event: MouseEvent): void {
-    if (!this.isDrawing) return;
-
-    const mousePos = this.getMousePosition(event);
-    this.voxEnd = mousePos;
-  }
-
-  public endDrag(event: MouseEvent): void {
-    if (!this.isDrawing) return;
-
-    this.isDrawing = false;
-    const mousePos = this.getMousePosition(event);
-    this.voxEnd = mousePos;
-
-    console.log(this.voxStart);
-    console.log(this.voxEnd);
-
-    this.onRectangleDraw({
-      voxStart: this.voxStart,
-      voxEnd: this.voxEnd,
-      axCorSag: 0
-    });
-  }
-
-  private getMousePosition(event: MouseEvent): number[] {
-    const canvas = event.target as HTMLCanvasElement;
-    const rect = canvas.getBoundingClientRect();
-    const x = (event.clientX - rect.left) * canvas.width / rect.width;
-    const y = (event.clientY - rect.top) * canvas.height / rect.height;
-    const z = 0;
-    return [x, y, z];
-  }
 }
