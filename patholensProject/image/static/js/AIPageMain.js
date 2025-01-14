@@ -107,6 +107,20 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.assign(`/image/editDiagnosis/${diagnosisID}`)
     });
 
+    const TakeAIDiagnosisButton = document.getElementById("TakeAIDiagnosis");
+
+    TakeAIDiagnosisButton.addEventListener("click", () => {
+        window.location.assign(`/image/editDiagnosis/${diagnosisID}/transitionPage/`)
+    });
+
+    const TakeMyDiagnosisButton = document.getElementById("TakeMyDiagnosis");
+
+    TakeMyDiagnosisButton.addEventListener("click", () => {
+        window.location.assign(`/image/editDiagnosis/${diagnosisID}/transitionPage/`)
+    });
+
+
+
 });
 
 
