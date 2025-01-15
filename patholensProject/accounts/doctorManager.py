@@ -1,26 +1,12 @@
 import uuid
-import os
-import sys
-import django
-from pathlib import Path
 import random
-
-# Add project path (root directory where manage.py is located)
-sys.path.append(str(Path(__file__).resolve().parent.parent))
-
-# Define Django settings
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "patholensProject.settings")
-
-# Initialize Django
-django.setup()
-
 
 from image.mediaHandler import *
 from image.diagnosisManager import *
 from accounts.models import Doctors
 
 
-def createDoctor(user: django.contrib.auth.models.User) -> Doctors:
+def createDoctor(user) -> Doctors:
     """
     Creates a new doctor entry in the database.
 
@@ -48,8 +34,16 @@ def createUUIDs(amount: int) -> list[str]:
         list: A list of randomly generated UUIDs in string format.
     """
     allUUIDs:list = []
+    easteregg: list = ["rafik", "torge", "christoph", "lukas",  "imad", "imene", "snehpreet"]
     for i in range(amount):
-        allUUIDs.append(str(uuid.uuid4()))
+        
+        uuidStr: str = str(uuid.uuid4())
+        
+        midpoint = len(uuidStr) // 2
+        index = random.randint(0, len(easteregg)-1)
+        newUUID: str = f"{uuidStr[:midpoint]}-{easteregg[index]}{uuidStr[midpoint:]}" 
+        
+        allUUIDs.append(newUUID)
 
     return allUUIDs
 
@@ -265,6 +259,7 @@ def setContinueDiag(docID: str, diagID: str) -> dict:
     returnDict.update({"status": True})
     return returnDict
    
+   
 def getAvailableDatasets(docID) -> list:
     """
     Retrieves the list of available datasets associated with the specific doctor.
@@ -287,3 +282,32 @@ def getAvailableDatasets(docID) -> list:
     
     return datasets
            
+
+def deleteContinueDiag(docID: str) -> dict:
+    """
+    Deletes the ongoing diagnosis of the doctor.
+
+    Args:
+        docID (str): The ID of the doctor.
+
+    Returns:
+        dict: A dictionary containing:
+            - "status" (bool): True if the operation was successful, False otherwise.
+            - "reason" (str): A string providing the reason for failure, or empty if successful.
+            - "message" (str): A detailed message explaining the result of the operation.
+    """
+    returnDict = {"status": None, "reason": None, "message": None}
+
+    # Define the reasons for failure cases. (constant)
+    DOC_REASON: str = "Doctorobject" # Doc does not exists
+    
+    docObject: Doctors = getDoctorObject(docID=docID)
+    if not docObject:
+        returnDict.update ({"status": False, "reason": DOC_REASON ,"message": "The doctor does not exist."})
+        return returnDict
+    
+    docObject.continueDiag = None
+    docObject.save()
+    
+    returnDict.update({"status": True})
+    return returnDict

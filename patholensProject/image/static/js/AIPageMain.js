@@ -1,5 +1,5 @@
 import { Niivue } from "./index.js";
-import { niivueCanvas, loadImageWithDiagnosis, loadImageWithMask, loadOverlayDAI, endTimer } from "./pathoLens.js";
+import { niivueCanvas, loadImageWithDiagnosis, loadImageWithMask, loadOverlayDAI, endTimer, deleteContinueDiagnosis } from "./pathoLens.js";
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -107,20 +107,19 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.assign(`/image/editDiagnosis/${diagnosisID}`)
     });
 
-    const TakeAIDiagnosisButton = document.getElementById("TakeAIDiagnosis");
-
-    TakeAIDiagnosisButton.addEventListener("click", () => {
-        window.location.assign(`/image/editDiagnosis/${diagnosisID}/transitionPage/`)
-    });
-
     const TakeMyDiagnosisButton = document.getElementById("TakeMyDiagnosis");
-
     TakeMyDiagnosisButton.addEventListener("click", () => {
+        deleteContinueDiagnosis(diagnosisID, csrfToken);
         window.location.assign(`/image/editDiagnosis/${diagnosisID}/transitionPage/`)
     });
 
 
+    const TakeAIDiagnosisButton = document.getElementById("TakeAIDiagnosis");
+    TakeAIDiagnosisButton.addEventListener("click", () => {
+        deleteContinueDiagnosis(diagnosisID, csrfToken);
+        window.location.assign(`/image/editDiagnosis/${diagnosisID}/transitionPage/`)
+    });
+
+    
 
 });
-
-

@@ -1,5 +1,5 @@
 import { Niivue, DRAG_MODE } from "./index.js";
-import { niivueCanvas,drawRectangleNiivue,loadImageAPI, loadImageWithDiagnosis, loadImageWithMask, loadOverlayDAI, endTimer, sendConfidence, savedEditedImage } from "./pathoLens.js";
+import { niivueCanvas,drawRectangleNiivue,loadImageAPI, loadImageWithDiagnosis, loadImageWithMask, loadOverlayDAI, endTimer, sendConfidence, savedEditedImage, deleteContinueDiagnosis } from "./pathoLens.js";
 
 document.addEventListener('DOMContentLoaded', function() {
     
@@ -131,6 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
      
     // disables drawing
     function disableDrawing(){
+        deactivateAllButtons();
         if(!drawRectangle && !erasing){
             endTimer('Freehand drawing', startTime, diagnosisID, csrfToken)
         }
@@ -286,6 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
         await sendConfidence(confidenceValue, diagnosisID, csrfToken);
         await endTimer('Confidence confirmed', startTime, diagnosisID, csrfToken);
         await savedEditedImage(nv, diagnosisID, csrfToken);
+        await deleteContinueDiagnosis(diagnosisID, csrfToken);
         window.location.assign(`/image/editDiagnosis/${diagnosisID}/transitionPage/`)
     }
 
@@ -319,4 +321,3 @@ document.addEventListener('DOMContentLoaded', function() {
      // save image if logged out
      //document.getElementById("logoutButton").addEventListener("click", savedEditedImage(nv, diagnosisID, csrfToken));
 });
-
