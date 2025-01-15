@@ -33,14 +33,20 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Own Apps
     'accounts',
     'image',
+    'fcd',
+    
+    # Standard Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Added Libaries
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_spectacular'

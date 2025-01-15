@@ -27,7 +27,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
     path('image/', include('image.urls')),
-    
+    path('api/fcd/', include('fcd.urls')),
+
     path('startingPage/', views.homepage, name = "StartingPage"),
     path('selectDataset/forwarding/<str:datasetName>/', views.forwardingInformation, name='forwardingInformation'),
     
