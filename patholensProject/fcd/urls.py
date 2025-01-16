@@ -16,9 +16,14 @@ Including another URLconf
 """
 from django.urls import path, include
 from django.conf import settings
+from .views import DatasetAPIView
+from .views import SessionAPIView
+from .views import LoginAPIView
+from .views import StudyAPIView
 
 urlpatterns = [
-    path('/login'),
-    path('/dataset/<int:dataset_id>'),
-    path('/session/<int:session_id>')
+    path('/login', LoginAPIView.as_view(), name="login"),
+    path('/dataset/<int:dataset_id>', DatasetAPIView.as_view(), name="dataset"),
+    path('/session/<int:session_id>', SessionAPIView.as_view(), name="session"),
+    path('/studies', StudyAPIView.as_view(), name="studies")
 ]
