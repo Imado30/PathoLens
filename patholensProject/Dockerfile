@@ -9,6 +9,7 @@ WORKDIR /app
 COPY ./requirements.txt .
 
 ENV PYTHONUNBUFFERED=1
+ENV FCD_ASSISTANT_URL="https://localhost:8080"
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 

@@ -8,4 +8,6 @@ RUN npm install -g @angular/cli
 
 RUN npm install
 
+ENV PATHOLENS_URL=""
+
 CMD ["ng", "serve", "--host", "0.0.0.0"]
