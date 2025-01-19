@@ -272,6 +272,29 @@ document.addEventListener('DOMContentLoaded', function() {
         await sendTimeStamp(action, utcTime, diagnosisID, csrfToken);
     }
 
+
+    document.getElementById("homeIcon").addEventListener("click", async function(event) {
+        event.preventDefault();
+        console.log("nv:", nv); // Prüfe, ob nv definiert ist
+        await savedEditedImage(nv, diagnosisID, csrfToken);
+        window.location.href = "/startingPage";
+    })   
+    
+    
+    document.getElementById("logoutButton").addEventListener("click", async function(event) {
+        event.preventDefault();
+        console.log("nv:", nv); // Prüfe, ob nv definiert ist
+        await savedEditedImage(nv, diagnosisID, csrfToken);
+        window.location.href = "/logout/{{ currentPage }}";
+    });
+
+    document.querySelector(".NameIcon a").addEventListener("click", async function (event){
+        event.preventDefault(); // Prevent the default action
+        await savedEditedImage(nv, diagnosisID, csrfToken);
+        
+        window.location.href = "/startingPage"; // Navigate to the home page
+        console.log("Navigated to home successfully!");
+    });
     // save image if logged out        ATTENTION: prevent saving image twice!! It wont work
     //document.getElementById("logoutButton").addEventListener("click", savedEditedImage(nv, diagnosisID, csrfToken));
 

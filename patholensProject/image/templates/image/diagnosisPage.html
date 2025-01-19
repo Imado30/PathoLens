@@ -13,7 +13,11 @@
 
 <!--adds the homebutton-->
 
-
+{% block topBar %}
+<a href="/startingPage" class="homeButton">
+    <img alt="home" src="{% static 'icons\HomeButton.png' %}" id="homeIcon">
+</a>
+{% endblock %}
 {%block content%}
 
 <div class="toolbarContainer">
