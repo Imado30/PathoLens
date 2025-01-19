@@ -28,6 +28,8 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   
     this.niivue.onDragRelease = onDragRelease;
     this.niivue.drawOpacity = 1.0;
+    this.niivue.setMultiplanarLayout(3);
+
   }
 
   ngOnInit(): void {

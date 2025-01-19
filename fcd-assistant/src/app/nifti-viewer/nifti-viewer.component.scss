@@ -1,5 +1,7 @@
 canvas#gl {
-    width: 100%;
+    width: 1200px;
     height: 100%;
     display: block; /* Remove inline padding/margin from canvas */
+    top: 0;
+    left: 0;
 }

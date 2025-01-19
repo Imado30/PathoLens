@@ -2,11 +2,12 @@
   <div class="viewer-title">
     <p>Nifti Viewer</p>
   </div>
-  <div class="button-bar">
-    <button (click)="onViewingClicked()" ><i class="fa-solid fa-arrow-pointer"></i></button>
-    <button (click)="onDrawingClicked()"><i class="fa-regular fa-square"></i></button>
-    <button><i class="fa-solid fa-eraser"></i></button>
-  </div>
+    <div class="button-bar">
+    <button *ngFor="let button of buttons; let i = index"
+      [ngClass]="{ 'active' : activeButtonIndex === i}"
+      (click) = "onBarButtonClick(i)">
+        <i [class] = "button.icon" class="icon"></i>
+    </button></div>
   <div class="viewer-canvas">
     <app-nifti-viewer #glCanvas></app-nifti-viewer>
   </div>
