@@ -7,7 +7,12 @@
       [ngClass]="{ 'active' : activeButtonIndex === i}"
       (click) = "onBarButtonClick(i)">
         <i [class] = "button.icon" class="icon"></i>
-    </button></div>
+    </button>
+    <button (click)="onUndoClicked()"><i class="fa-solid fa-rotate-left"></i></button>
+    <button (click)="onClearClicked()"><i class="fa-solid fa-trash"></i></button>
+    <button (click)="onChangeViewClicked()"><i class="fa-solid fa-repeat"></i></button>
+  </div>
+
   <div class="viewer-canvas">
     <app-nifti-viewer #glCanvas></app-nifti-viewer>
   </div>

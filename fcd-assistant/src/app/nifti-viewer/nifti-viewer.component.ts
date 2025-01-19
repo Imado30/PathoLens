@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { Niivue, DRAG_MODE, DragReleaseParams} from '@niivue/niivue';
 
 @Component({
@@ -16,7 +17,7 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   isDrawing: boolean = false;       // To track if drawing is in progress
   DrawingEnabled: boolean = false;
 
-  constructor() {
+  constructor(private router: Router) {
     const onDragRelease = (data: DragReleaseParams) : void => {
       this.drawRectangleNiivue(this.niivue, data);
     };
@@ -30,6 +31,21 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
     this.niivue.drawOpacity = 1.0;
     this.niivue.setMultiplanarLayout(3);
 
+  }
+
+  configureNiivue(){
+    const onDragRelease = (data: DragReleaseParams) : void => {
+      this.drawRectangleNiivue(this.niivue, data);
+    };
+  
+    this.niivue = new Niivue({
+      show3Dcrosshair: true,
+      dragMode: DRAG_MODE.callbackOnly,
+    });
+  
+    this.niivue.onDragRelease = onDragRelease;
+    this.niivue.drawOpacity = 1.0;
+    this.niivue.setMultiplanarLayout(3);
   }
 
   ngOnInit(): void {
@@ -78,6 +94,24 @@ export class NiftiViewerComponent implements OnInit, AfterViewInit, OnDestroy {
   public disableDrawing(): void {
     this.DrawingEnabled = false;
     console.log('Drawing mode disabled.');
+  }
+
+  public changeView(): void {
+
+    if(this.niivue.opts.multiplanarLayout === 3){
+    this.niivue.setMultiplanarLayout(2); } else {
+      this.niivue.setMultiplanarLayout(3);
+    }
+  }
+
+  public undoDraw(): void {
+    this.niivue.drawUndo();
+    this.niivue.drawUndo();
+    this.niivue.refreshDrawing(true);
+  }
+
+  public clearDraw(): void {
+    window.location.reload();
   }
 
   private onRectangleDraw(data: any): void {

@@ -17,11 +17,10 @@ export class AppComponent implements AfterViewInit {
 
   buttons = [
     {icon : 'fa-solid fa-arrow-pointer'},
-    {icon : 'fa-regular fa-square'},
-    {icon : 'fa-solid fa-rotate-left'}
+    {icon : 'fa-regular fa-square'}
   ]
 
-  activeButtonIndex: number | null = null;
+  activeButtonIndex: number = 0;
 
   ngAfterViewInit(): void {
     const canvas = this.niftiViewerComponent.canvasRef.nativeElement; // Access canvas in the child component
@@ -52,6 +51,18 @@ export class AppComponent implements AfterViewInit {
 
   onViewingClicked(){
     this.niftiViewerComponent.disableDrawing();
+  }
+
+  onChangeViewClicked(){
+    this.niftiViewerComponent.changeView();
+  }
+
+  onUndoClicked(){
+    this.niftiViewerComponent.undoDraw();
+  }
+
+  onClearClicked() {
+    this.niftiViewerComponent.clearDraw();
   }
 
   private resizeCanvas(): void {
