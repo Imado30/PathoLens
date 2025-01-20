@@ -1,0 +1,19 @@
+import django
+import os
+import sys
+from pathlib import Path
+
+# Add project path (root directory where manage.py is located)
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
+# Define Django settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "patholensProject.settings")
+
+# Initialize Django
+django.setup()
+
+def create_study():
+
+def get_datasets_in_study():
+
+def 
