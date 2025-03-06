@@ -11,7 +11,7 @@ A full-stack web application that supports medical diagnoses through AI-powered 
 - **Medical Image Visualization**: Support for the NIFTI format using the `niivue` javascript-library.
 - ** Admin-pannel feature: - all diagnosis are exportable and assigning specific datasets to each doctor is possible **
 - **AI Prediction Overlays**: Display AI model outputs on (edited) medical images.
-- **Image Annotation**: Easy annotations using free-hand-drawing, rectangles, or optional masks.
+- **Image Annotation**: Easy annotations using free-hand-drawing, rectangles, or optional AI-masks for marking multiple lesions.
 - **Data Management**: Store annotations, user data and diagnostic information.
 - **Time Tracking**: tracks time of every action for further analysis.
 - **Randomized Experiment Workflow**: Minimize bias through randomized dataset presentation.
@@ -48,7 +48,9 @@ A full-stack web application that supports medical diagnoses through AI-powered 
 - Pip
 
 ### Setup
+- Docker-Command: 
 
+Once your server is running, open your web browser and navigate to your application's local address. The application is set to automatically reload whenever you modify any of the source files.
 
 ### Authors  
 - **Torge Rau** 
