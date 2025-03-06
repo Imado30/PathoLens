@@ -8,7 +8,8 @@ A full-stack web application that supports medical diagnoses through AI-powered 
 ## Features
 
 - **User Registration and Login**: Authentication and individual user accounts.
-- **Medical Image Visualization**: Support for the NIFTI format using the `niivue` javasript-library.
+- **Medical Image Visualization**: Support for the NIFTI format using the `niivue` javascript-library.
+- ** Admin-pannel feature: - all diagnosis are exportable and assigning specific datasets to each doctor is possible **
 - **AI Prediction Overlays**: Display AI model outputs on (edited) medical images.
 - **Image Annotation**: Easy annotations using free-hand-drawing, rectangles, or optional masks.
 - **Data Management**: Store annotations, user data and diagnostic information.
@@ -28,39 +29,35 @@ A full-stack web application that supports medical diagnoses through AI-powered 
 ### Backend  
 - Python  
 - Django  
-- Docker  
 
 ### Database  
-- MySQL  
+- MySQL lite
+
+### Deployment
+- Docker
 
 ---
 
 ## Installation  
 
 ### Prerequisites
-- Git  
+- Git: `sudo apt install git`
 - Docker and Docker Compose  
 - A modern web browser  
+- Python
+- Pip
+
+### Setup
 
 
 ### Authors  
 - **Torge Rau** 
 - **Lukas Baumeister**
-- **Christoph Maul**
+- **Christoph Mauel**
 - **Snehpreet Kaur Dhinsa**
 - **Imene Benamer Belkacem Zadoud**
 - **Imad Azizi**
 - **Rafik Farhane**
-
-## Acknowledgments  
-
-We would like to express our heartfelt gratitude to the following individuals for their invaluable support and guidance throughout the development of this project:  
-
-- **Professor Stephan Jonas**: For offering the project group and providing us with the opportunity to explore this innovative topic.  
-- **Taylor**: A developer of the `niivue` library, for his technical JavaScript support and prompt assistance.  
-- **Lennart**: For being an incredible resource, always available to help with technical challenges and domain-related questions.  
-- **Amelia**: Our dedicated manager, whose background in psychology provided us with invaluable insights on improving the user-friendliness of our platform. Her thoughtful suggestions and feedback greatly helped us in the design- and structering process.  
-
-Your contributions and encouragement have been instrumental in making this project a success. Thank you!  
+ 
 
 
