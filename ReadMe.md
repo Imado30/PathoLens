@@ -13,13 +13,21 @@
   </p>
 </p>
 
+<p align="center">
+  <a href="docs/media/patholens-demo.mp4">
+    <img src="docs/media/patholens-demo.gif" width="720" alt="PathoLens demo with the MRI viewer, freehand drawing and 3D lesion boxes across slices">
+  </a>
+  <br>
+  <sub>Click the preview for the video in full quality (MP4)</sub>
+</p>
+
 ---
 
 ## 📖 Overview
 
-**PathoLens** is a full-stack, web-based diagnostic platform designed to bridge the gap between cutting-edge AI research and real-world clinical practice. It enables radiologists and physicians to interact with complex 3D medical images — particularly **NIfTI (`.nii`) MRI scans** — directly in the browser, overlaying AI-generated predictions and annotating findings with precision tools.
+**PathoLens** is a full-stack, web-based diagnostic platform designed to bridge the gap between cutting-edge AI research and real-world clinical practice. It enables radiologists and physicians to interact with complex 3D medical images, particularly **NIfTI (`.nii`) MRI scans**, directly in the browser, overlaying AI-generated predictions and annotating findings with precision tools.
 
-The platform is built around a structured, **randomized experiment workflow** that minimizes cognitive bias during evaluations. Every user interaction is meticulously time-tracked, and all diagnostic findings — annotations, lesion markings, confidence scores — are stored persistently and exportable for downstream analysis.
+The platform is built around a structured, **randomized experiment workflow** that minimizes cognitive bias during evaluations. Every user interaction is meticulously time-tracked, and all diagnostic findings (annotations, lesion markings, confidence scores) are stored persistently and exportable for downstream analysis.
 
 PathoLens is not just a viewer. It is a **complete diagnostic research environment**.
 
@@ -28,7 +36,7 @@ PathoLens is not just a viewer. It is a **complete diagnostic research environme
 ## ✨ Key Features
 
 ### 🖥️ Medical Image Visualization
-- Native in-browser rendering of **NIfTI (`.nii` / `.nii.gz`) format** MRI volumes using the [`NiiVue`](https://github.com/niivue/niivue) JavaScript library — no plugins or external software required.
+- Native in-browser rendering of **NIfTI (`.nii` / `.nii.gz`) format** MRI volumes using the [`NiiVue`](https://github.com/niivue/niivue) JavaScript library. No plugins or external software required.
 - Supports multi-plane views (axial, coronal, sagittal) for thorough spatial analysis.
 
 ### 🤖 AI Prediction Overlays
@@ -40,11 +48,11 @@ PathoLens is not just a viewer. It is a **complete diagnostic research environme
   - **Free-hand drawing** for irregular lesion contours
   - **Rectangle selection** for bounding-box annotations
   - **Cuboid / 3D region marking** for volumetric lesions
-  - **AI-mask integration** — use the AI prediction as a starting annotation and refine it
+  - **AI-mask integration** to use the AI prediction as a starting annotation and refine it
 - Multiple lesions can be marked and labeled within a single session.
 
 ### ⏱️ Granular Time Tracking
-- Every user action — from image load to annotation completion — is timestamped and stored.
+- Every user action, from image load to annotation completion, is timestamped and stored.
 - Enables detailed **workflow efficiency analysis** and clinical research on diagnosis times.
 
 ### 🔀 Randomized Experiment Workflow
@@ -62,7 +70,7 @@ PathoLens is not just a viewer. It is a **complete diagnostic research environme
 - Individual doctor profiles with dedicated session state and assigned datasets.
 
 ### 💾 Session Persistence
-- Diagnostic progress is automatically saved. Doctors can log out and seamlessly resume exactly where they left off — no data is lost between sessions.
+- Diagnostic progress is automatically saved. Doctors can log out and seamlessly resume exactly where they left off. No data is lost between sessions.
 
 ### 🌐 RESTful API
 - Full REST API backend powered by **Django REST Framework (DRF)**.
@@ -130,11 +138,9 @@ This is the fastest and most reliable way to get PathoLens up and running.
 #### 1. Clone the Repository
 
 ```sh
-git clone <REPOSITORY_URL>
+git clone https://github.com/Imado30/PathoLens.git
 cd PathoLens
 ```
-
-> Replace `<REPOSITORY_URL>` with the actual Bitbucket repository URL.
 
 #### 2. Build and Start the Application
 
@@ -211,6 +217,7 @@ The application will be available at [http://localhost:8000/](http://localhost:8
 ```
 PathoLens/
 ├── docker-compose.yml              # Docker Compose orchestration
+├── docs/media/                     # Demo video and preview
 ├── patholensProject/
 │   ├── Dockerfile                  # Application container definition
 │   ├── manage.py                   # Django management entry point
